@@ -1,4 +1,4 @@
-# CS4050 Lab 2: DYNAMIC PROGRAMMING FOR “BAD SCANTRON”,  SIGNAL SYCHRONIZATION
+# CS4050 Lab 4: DYNAMIC PROGRAMMING FOR “BAD SCANTRON”,  SIGNAL SYCHRONIZATION
 ![GitHub Latest Pre-Release)](https://img.shields.io/github/v/release/angrynarwhal/4050-Lab-2?include_prereleases&label=pre-release&logo=github)  
 
 **On this lab, if you use an AI to contribute to your solution, you must paste a link to all of your prompts, which are usually in one session as you ask clarifying questions of the "AI" (which is really just a pattern recognition engine).** We note that we *can* tell when AI's are used, and we are confident that AI use has been extensive to this point. There are reflection questions at the end of this assignment regarding AI use that you must also answer if you used an AI to assist you with the assignment. 
