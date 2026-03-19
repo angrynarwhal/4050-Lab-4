@@ -121,3 +121,8 @@ Exam #5 scored 22 out of 40.
 
 
 ## submit all deliverables inside a zip folder including tables and snapshot to respective questions in a pdf format
+
+# If you used AI, also include answers to these questions in a separate markdown document: 
+1. How and to what extent do you think using AI allowed you to complete the assignment more quickly?
+2. What effects on your learning and understanding of the topic in this lab did AI have? Do you think you learned more? Less? Due to AI use?
+3. Describe a lab design that would help to ensure you fully understand the material, while also allowing AI use. 
