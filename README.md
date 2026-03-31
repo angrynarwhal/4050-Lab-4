@@ -4,7 +4,7 @@
 
 **On this lab, if you use an AI to contribute to your solution, you must paste a link to all of your prompts, which are usually in one session as you ask clarifying questions of the "AI" (which is really just a pattern recognition engine).** We note that we *can* tell when AI's are used, and we are confident that AI use has been extensive to this point. There are reflection questions at the end of this assignment regarding AI use that you must also answer if you used an AI to assist you with the assignment. 
  
-Place all of your submission documents in the [./lab4_submission](lab4_submission) folder. You will submit a zip file of that directory in Canvas.
+Place all of your submission documents in the [./lab4_submission](lab4_submission) folder. You will submit a your GitHub URL.
 ---------------------
 ## Overview
 In this assignment, we are imagining that some CMP_SC 1050 students took a 40 question “Scantron” exam.  Some of them answered all of the questions, and some of them left a few questions blank.  Unfortunately, Mizzou used a new buggy version of the Scantron software to read the answers from the exams, and then promptly lost the original paper answer sheets.  The Scantron software correctly read the answers and recorded them.  However, it did not leave a space or a mark to show that a particular question was omitted by a student.  This isn’t really a problem for grading students who answered all of the questions.  The problem is that we don’t really know WHICH question(s) a student omitted and for WHICH questions(s) a student marked an answer.
