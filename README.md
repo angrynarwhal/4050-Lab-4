@@ -1,129 +1,133 @@
-# CS4050 Lab 4: DYNAMIC PROGRAMMING FOR “BAD SCANTRON”,  SIGNAL SYCHRONIZATION
+# Claw Code
 
-![GitHub Latest Pre-Release)](https://img.shields.io/github/v/release/angrynarwhal/4050-Lab-4?include_prereleases&label=pre-release&logo=github)  
+<p align="center">
+  <a href="https://github.com/ultraworkers/claw-code">ultraworkers/claw-code</a>
+  ·
+  <a href="./USAGE.md">Usage</a>
+  ·
+  <a href="./rust/README.md">Rust workspace</a>
+  ·
+  <a href="./PARITY.md">Parity</a>
+  ·
+  <a href="./ROADMAP.md">Roadmap</a>
+  ·
+  <a href="https://discord.gg/5TUQKqFWd">UltraWorkers Discord</a>
+</p>
 
-**On this lab, if you use an AI to contribute to your solution, you must paste a link to all of your prompts, which are usually in one session as you ask clarifying questions of the "AI" (which is really just a pattern recognition engine).** We note that we *can* tell when AI's are used, and we are confident that AI use has been extensive to this point. There are reflection questions at the end of this assignment regarding AI use that you must also answer if you used an AI to assist you with the assignment. 
- 
-Place all of your submission documents in the [./lab4_submission](lab4_submission) folder. You will submit a your GitHub URL.
----------------------
-## Overview
-In this assignment, we are imagining that some CMP_SC 1050 students took a 40 question “Scantron” exam.  Some of them answered all of the questions, and some of them left a few questions blank.  Unfortunately, Mizzou used a new buggy version of the Scantron software to read the answers from the exams, and then promptly lost the original paper answer sheets.  The Scantron software correctly read the answers and recorded them.  However, it did not leave a space or a mark to show that a particular question was omitted by a student.  This isn’t really a problem for grading students who answered all of the questions.  The problem is that we don’t really know WHICH question(s) a student omitted and for WHICH questions(s) a student marked an answer.
+<p align="center">
+  <a href="https://star-history.com/#ultraworkers/claw-code&Date">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=ultraworkers/claw-code&type=Date&theme=dark" />
+      <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=ultraworkers/claw-code&type=Date" />
+      <img alt="Star history for ultraworkers/claw-code" src="https://api.star-history.com/svg?repos=ultraworkers/claw-code&type=Date" width="600" />
+    </picture>
+  </a>
+</p>
 
-Luckily, we have a way to solve this problem in CMP_SC 4050:  Dynamic Programming!  Your job is to grade the Scantron strings against a 40-question key.  Since some of the response strings from “Bad Scantron” will have less than 40 responses in them, you will need to use a Dynamic Programming algorithm to line up the student responses with the responses in the key.  Note that you will want to do this in a way that is as “student-friendly” as possible, as students will undoubtedly complain if they receive less points than they could from your alignment.
+<p align="center">
+  <img src="assets/claw-hero.jpeg" alt="Claw Code" width="300" />
+</p>
 
-## Learning Objectives ##
+Claw Code is the public Rust implementation of the `claw` CLI agent harness.
+The canonical implementation lives in [`rust/`](./rust), and the current source of truth for this repository is **ultraworkers/claw-code**.
 
-1. Alignment problems under uncertainty
+> [!IMPORTANT]
+> Start with [`USAGE.md`](./USAGE.md) for build, auth, CLI, session, and parity-harness workflows. Make `claw doctor` your first health check after building, use [`rust/README.md`](./rust/README.md) for crate-level details, read [`PARITY.md`](./PARITY.md) for the current Rust-port checkpoint, and see [`docs/container.md`](./docs/container.md) for the container-first workflow.
+>
+> **ACP / Zed status:** `claw-code` does not ship an ACP/Zed daemon entrypoint yet. Run `claw acp` (or `claw --acp`) for the current status instead of guessing from source layout; `claw acp serve` is currently a discoverability alias only, and real ACP support remains tracked separately in `ROADMAP.md`.
 
-2. Optimization over multiple candidate solutions
+## Current repository shape
 
-3. Mapping real-world noise to algorithms
+- **`rust/`** — canonical Rust workspace and the `claw` CLI binary
+- **`USAGE.md`** — task-oriented usage guide for the current product surface
+- **`PARITY.md`** — Rust-port parity status and migration notes
+- **`ROADMAP.md`** — active roadmap and cleanup backlog
+- **`PHILOSOPHY.md`** — project intent and system-design framing
+- **`src/` + `tests/`** — companion Python/reference workspace and audit helpers; not the primary runtime surface
 
-4. Time complexity tradeoffs
+## Quick start
 
-5. Careful index reasoning
+> [!NOTE]
+> [!WARNING]
+> **`cargo install claw-code` installs the wrong thing.** The `claw-code` crate on crates.io is a deprecated stub that places `claw-code-deprecated.exe` — not `claw`. Running it only prints `"claw-code has been renamed to agent-code"`. **Do not use `cargo install claw-code`.** Either build from source (this repo) or install the upstream binary:
+> ```bash
+> cargo install agent-code   # upstream binary — installs 'agent.exe' (Windows) / 'agent' (Unix), NOT 'agent-code'
+> ```
+> This repo (`ultraworkers/claw-code`) is **build-from-source only** — follow the steps below.
 
-## Signal synchronization ##
-## Topic: Signal Matching Using Shifts ##
+```bash
+# 1. Clone and build
+git clone https://github.com/ultraworkers/claw-code
+cd claw-code/rust
+cargo build --workspace
 
-Exercise 1: Problem Statement**
-A reference signal (the key) is transmitted correctly from a transmitting device  using the values below:
+# 2. Set your API key (Anthropic API key — not a Claude subscription)
+export ANTHROPIC_API_KEY="sk-ant-..."
 
-**Key Signal:
-5 2 3 2 2 1 4**
+# 3. Verify everything is wired correctly
+./target/debug/claw doctor
 
-A receiver records a shorter signal (the exam), but the recording starts late due to synchronization error:
-
-**Recorded Signal:
-3 2 2 1**
-
-Because of timing error, the recorded signal may be shifted left or right relative to the key.
-                        
-  ## Exercise 1 ##
- Question  1.
-1.	Slide (shift) the recorded signal across the key. Hint key does not move, provide all detailed work for these shift including tables, snap shots etc
-```
-a.	-2 
-b.	-1
-c.	0
-d.	+1
-
-```
-
-2.	For each alignment (shift), count how many values match.
-3.	Determine:
-``` 
-  o	the score at each shift
-  o	the best alignment
-  o	the maximum score
-```
-
-## Exercise 2 :
-1.	Explain why testing all offsets (shifts) guarantees the optimal score.
-2.	What does Shift Left mean in signal alignment?
-3.	What does No Shift mean?
-4.	What does Shift Right mean?
-5.	Where else is this algorithm used?   provide a real word scenario. 
-
-
-## HOW TO GET STARTED ON EXCERSICE 3 ##
-To get started you should:
-
-git clone https://github.com/JimRies1966/cs4050fs2024a4.git
-In this repo you will find a main.C, grade.h, you are to create  a grade.C function code that TA will complie using the make function.
-You are welcome to work on your code on any platform you like, but remember that the TAs will grade this on Hellbender.  If your code does not compile, segfaults, or otherwise fails to run on Hellbender, you will get a zero.  
-Once you have the starter code in a directory, just type “make”.  This will build the code and leave you with an executable file called “grade”.  Just type **./grade** to execute.  You will want to implement the function grade() in grade.c to make things work correctly.
-
-## SAMPLE OUTPUT #1 – BEFORE IMPLEMENTING
-
-```
-jimr@JimRBeastCanyon:~/CS4050/FS2024/assignments/cs4050fs2024a4$ make
-Compiling main.c
-Compiling grade.c
-Linking grade
-jimr@JimRBeastCanyon:~/CS4050/FS2024/assignments/cs4050fs2024a4$ ./grade
-The key scored 0 out 40 against itself.
-Exam #0 scored 0 out of 40.
-Exam #1 scored 0 out of 40.
-Exam #2 scored 0 out of 40.
-Exam #3 scored 0 out of 40.
-Exam #4 scored 0 out of 40.
-Exam #5 scored 0 out of 40.
-
+# 4. Run a prompt
+./target/debug/claw prompt "say hello"
 ```
 
+> [!NOTE]
+> **Windows (PowerShell):** the binary is `claw.exe`, not `claw`. Use `.\target\debug\claw.exe` or run `cargo run -- prompt "say hello"` to skip the path lookup.
 
-## SAMPLE OUTPUT #2 – AFTER IMPLEMENTING
+### Windows setup
+
+**PowerShell is a supported Windows path.** Use whichever shell works for you. The common onboarding issues on Windows are:
+
+1. **Install Rust first** — download from <https://rustup.rs/> and run the installer. Close and reopen your terminal when it finishes.
+2. **Verify Rust is on PATH:**
+   ```powershell
+   cargo --version
+   ```
+   If this fails, reopen your terminal or run the PATH setup from the Rust installer output, then retry.
+3. **Clone and build** (works in PowerShell, Git Bash, or WSL):
+   ```powershell
+   git clone https://github.com/ultraworkers/claw-code
+   cd claw-code/rust
+   cargo build --workspace
+   ```
+4. **Run** (PowerShell — note `.exe` and backslash):
+   ```powershell
+   $env:ANTHROPIC_API_KEY = "sk-ant-..."
+   .\target\debug\claw.exe prompt "say hello"
+   ```
+
+**Git Bash / WSL** are optional alternatives, not requirements. If you prefer bash-style paths (`/c/Users/you/...` instead of `C:\Users\you\...`), Git Bash (ships with Git for Windows) works well. In Git Bash, the `MINGW64` prompt is expected and normal — not a broken install.
+
+> [!NOTE]
+> **Auth:** claw requires an **API key** (`ANTHROPIC_API_KEY`, `OPENAI_API_KEY`, etc.) — Claude subscription login is not a supported auth path.
+
+Run the workspace test suite:
+
+```bash
+cd rust
+cargo test --workspace
 ```
 
-jimr@JimRBeastCanyon:~/CS4050/FS2024/assignments/A4$ make
-Compiling main.c
-Compiling grade.c
-Linking grade
-jimr@JimRBeastCanyon:~/CS4050/FS2024/assignments/A4$ ./grade
-The key scored 40 out 40 against itself.
-Exam #0 scored 20 out of 40.
-Exam #1 scored 22 out of 40.
-Exam #2 scored 16 out of 40.
-Exam #3 scored 30 out of 40.
-Exam #4 scored 18 out of 40.
-Exam #5 scored 22 out of 40.
+## Documentation map
 
-```
+- [`USAGE.md`](./USAGE.md) — quick commands, auth, sessions, config, parity harness
+- [`rust/README.md`](./rust/README.md) — crate map, CLI surface, features, workspace layout
+- [`PARITY.md`](./PARITY.md) — parity status for the Rust port
+- [`rust/MOCK_PARITY_HARNESS.md`](./rust/MOCK_PARITY_HARNESS.md) — deterministic mock-service harness details
+- [`ROADMAP.md`](./ROADMAP.md) — active roadmap and open cleanup work
+- [`PHILOSOPHY.md`](./PHILOSOPHY.md) — why the project exists and how it is operated
 
-## Exercise 3 Questions ##
-1. submit grade.C 
-2. What does the key signal represent in the grading system?
-3. What does the exam signal represent?
-4. Why might the exam signal be shorter than the key signal?
-5. Why must the grading program test multiple shifts?
-6. Why must the program check array bounds when comparing signals?
-7. Write pseudocode for computing the best alignment score
+## Ecosystem
 
+Claw Code is built in the open alongside the broader UltraWorkers toolchain:
 
-## submit all deliverables inside a zip folder including tables and snapshot to respective questions in a pdf format
+- [clawhip](https://github.com/Yeachan-Heo/clawhip)
+- [oh-my-openagent](https://github.com/code-yeongyu/oh-my-openagent)
+- [oh-my-claudecode](https://github.com/Yeachan-Heo/oh-my-claudecode)
+- [oh-my-codex](https://github.com/Yeachan-Heo/oh-my-codex)
+- [UltraWorkers Discord](https://discord.gg/5TUQKqFWd)
 
-# If you used AI, also include answers to these questions in a separate markdown document: 
-1. How and to what extent do you think using AI allowed you to complete the assignment more quickly?
-2. What effects on your learning and understanding of the topic in this lab did AI have? Do you think you learned more? Less? Due to AI use?
-3. Describe a lab design that would help to ensure you fully understand the material, while also allowing AI use. 
+## Ownership / affiliation disclaimer
+
+- This repository does **not** claim ownership of the original Claude Code source material.
+- This repository is **not affiliated with, endorsed by, or maintained by Anthropic**.
